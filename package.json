@@ -1,8 +1,15 @@
 {
   "name": "selenium-playwright-demo-suite",
   "version": "1.0.0",
+  "description": "Portfolio-ready Playwright UI automation suite using Page Object Model patterns.",
   "scripts": {
-    "test": "playwright test"
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "report": "playwright show-report"
+  },
+  "engines": {
+    "node": ">=18"
   },
   "devDependencies": {
     "@playwright/test": "^1.54.1"
