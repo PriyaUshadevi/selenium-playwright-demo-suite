@@ -5,5 +5,6 @@ export class LoginPage {
 
   async navigate() {
     await this.page.goto('https://www.saucedemo.com');
+    login(username, password)
   }
 }
