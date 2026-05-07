@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Portfolio-ready Playwright UI automation suite using Page Object Model patterns.",
   "scripts": {
+    "install:browsers": "playwright install chromium",
     "test": "playwright test",
     "test:headed": "playwright test --headed",
     "test:ui": "playwright test --ui",

@@ -1,25 +1,40 @@
 # Selenium Playwright Demo Suite
 
-Portfolio-ready UI automation framework built with Playwright, TypeScript, and the Page Object Model pattern. The suite validates real browser workflows against the public SauceDemo application and is structured to demonstrate clean test design, reusable page classes, configurable environments, and professional reporting.
+Portfolio-ready UI automation project built with Playwright, TypeScript, and the Page Object Model pattern. The main suite validates real browser login workflows against the public SauceDemo application and is organized to demonstrate maintainable test design, reusable page classes, configurable environments, and professional test reporting.
+
+## Project Status
+
+Current status: **Passed for the main Playwright automation suite.**
+
+Latest local validation on 07 May 2026:
+
+```text
+npm.cmd test
+3 passed
+```
+
+The repository also contains `Sample_MavenProject/`, an optional Java/Maven learning project. It is separate from the Playwright automation framework and is not required to run the browser tests. Maven and the JDK were not available on this machine during the latest review, so the optional Java project could not be compiled locally in this session.
 
 ## Problem Statement
 
-Manual regression testing for login workflows is repetitive, slow, and easy to miss when applications change. Recruiters and clients also need to see more than a single script: they need a small but complete automation framework that is readable, configurable, maintainable, and easy to run on another machine.
+Manual regression testing for login workflows is repetitive, slow, and easy to miss when an application changes. A recruiter or client also needs to see more than a single automation script: they need a small, understandable framework that is easy to install, easy to configure, repeatable, and structured in a way that can grow into a larger test suite.
 
 ## Solution
 
-This project provides an end-to-end Playwright automation suite for SauceDemo login scenarios. It uses a dedicated page object for login actions, isolated test cases for positive and negative behavior, browser-level assertions, screenshots/videos/traces on failure, and HTML reporting for review.
+This project provides an end-to-end Playwright automation suite for SauceDemo login scenarios. It uses a page object for login actions, isolated tests for positive and negative behavior, browser-level assertions, configurable target URLs, screenshots/videos/traces on failure, and an HTML report for evidence and review.
 
 ## Key Features
 
 - Playwright browser automation with TypeScript.
 - Page Object Model implementation in `pages/LoginPage.ts`.
-- Positive login validation for a standard user.
-- Negative login validation for a locked-out user.
-- Page title and inventory page assertions.
-- Configurable target URL through `BASE_URL`.
-- HTML report, screenshots, videos, and traces for failed tests.
+- Positive login validation for a standard SauceDemo user.
+- Negative login validation for a locked-out SauceDemo user.
+- Page title, URL, and inventory page assertions.
+- Configurable application URL through `BASE_URL`.
+- HTML test report generation.
+- Screenshots, videos, and traces retained on failure.
 - CI-friendly Playwright configuration with retry support.
+- Optional Java/Maven sample folder for core Java practice examples.
 
 ## Tech Stack
 
@@ -27,7 +42,8 @@ This project provides an end-to-end Playwright automation suite for SauceDemo lo
 - npm.
 - Playwright Test.
 - TypeScript syntax supported by Playwright.
-- Chromium browser, installed through Playwright.
+- Chromium browser installed through Playwright.
+- Optional: JDK and Maven for `Sample_MavenProject/`.
 
 ## Project Structure
 
@@ -37,11 +53,12 @@ selenium-playwright-demo-suite/
 |   `-- LoginPage.ts              # Reusable login page object
 |-- tests/
 |   `-- login.spec.ts             # Login workflow test scenarios
-|-- playwright.config.ts          # Playwright test configuration
+|-- playwright.config.ts          # Playwright configuration
 |-- package.json                  # npm scripts and dependencies
 |-- package-lock.json             # Locked dependency versions
 |-- .gitignore                    # Generated files excluded from git
-`-- Sample_MavenProject/          # Optional Java/Maven practice project, separate from the Playwright suite
+|-- README.md                     # Project documentation
+`-- Sample_MavenProject/          # Optional Java/Maven practice project
 ```
 
 ## Prerequisites
@@ -53,31 +70,45 @@ Install these before running the Playwright suite:
 - Git, if cloning from a remote repository.
 - Internet access, because tests run against `https://www.saucedemo.com`.
 
-Optional:
+Optional Java prerequisites:
 
-- Maven, only if you want to compile or run the separate `Sample_MavenProject` Java practice folder. Maven is not required for the Playwright automation suite.
+- JDK 17 or later.
+- Apache Maven 3.9 or later.
+
+Maven and the JDK are only needed if you want to compile or explore `Sample_MavenProject/`. They are not needed for the Playwright tests.
 
 ## Installation
 
-Clone the repository and install dependencies:
+Clone the repository:
 
 ```bash
 git clone <repository-url>
 cd selenium-playwright-demo-suite
+```
+
+Install npm dependencies:
+
+```bash
 npm install
 ```
 
-Install Playwright browsers if they are not already installed:
+Install the Chromium browser used by the suite:
 
 ```bash
-npx playwright install
+npm run install:browsers
+```
+
+Equivalent direct Playwright command:
+
+```bash
+npx playwright install chromium
 ```
 
 On Windows PowerShell, if `npm` is blocked by the local script execution policy, use:
 
-```bash
+```powershell
 npm.cmd install
-npm.cmd test
+npm.cmd run install:browsers
 ```
 
 ## Configuration
@@ -103,16 +134,17 @@ macOS/Linux:
 BASE_URL=https://www.saucedemo.com npm test
 ```
 
-Important configuration options are stored in `playwright.config.ts`:
+Important configuration lives in `playwright.config.ts`:
 
-- `testDir`: test files are loaded from `tests`.
+- `testDir`: loads tests from `tests`.
 - `baseURL`: defaults to SauceDemo and can be overridden with `BASE_URL`.
 - `browserName`: runs on Chromium.
 - `headless`: runs in headless mode by default.
 - `screenshot`: captures screenshots on failure.
 - `video`: keeps videos on failure.
 - `trace`: keeps Playwright traces on failure.
-- `reporter`: generates list output and an HTML report.
+- `retries`: retries once in CI.
+- `reporter`: prints list output and generates an HTML report.
 
 ## How to Run
 
@@ -140,13 +172,22 @@ Open the latest HTML report:
 npm run report
 ```
 
+Windows PowerShell alternatives:
+
+```powershell
+npm.cmd test
+npm.cmd run test:headed
+npm.cmd run test:ui
+npm.cmd run report
+```
+
 ## Test Coverage
 
 Current Playwright coverage includes:
 
 - Login page title validation.
 - Successful login using `standard_user`.
-- Inventory page validation after login.
+- Inventory page validation after successful login.
 - Locked-out user error validation using `locked_out_user`.
 
 ## Test Data
@@ -163,35 +204,61 @@ locked_out_user / secret_sauce
 After a test run, Playwright can generate:
 
 - `playwright-report/` for HTML reports.
-- `test-results/` for screenshots, videos, traces, and raw results.
+- `test-results/` for screenshots, videos, traces, and raw test results.
 
 These folders are generated artifacts and are intentionally ignored by git.
 
-## Code Quality Notes
+## Optional Java/Maven Project
 
-- Tests are grouped by business workflow in `tests/login.spec.ts`.
-- Reusable UI actions live in `pages/LoginPage.ts`.
-- Selectors use accessible placeholders and roles where possible.
-- The suite avoids hard-coded navigation URLs inside tests by using Playwright `baseURL`.
-- Failure artifacts are enabled to support debugging and client-facing evidence.
+`Sample_MavenProject/` contains beginner-friendly Java examples for topics such as access modifiers, encapsulation, inheritance, polymorphism, abstraction, interfaces, loops, and simple programs.
 
-## Current Status
+To compile it on a machine with JDK and Maven installed:
 
-The Playwright suite has been fixed, reviewed, and verified locally.
-
-Latest validation:
-
-```text
-npm.cmd test
-3 passed
+```bash
+cd Sample_MavenProject
+mvn test
 ```
 
-The main Playwright project is in working condition and ready to showcase as a compact automation portfolio project.
+This optional folder is not part of the Playwright test execution path. If you are showcasing the automation framework specifically, the main evidence is the Playwright suite and report.
+
+## Code Quality Notes
+
+- Tests are grouped by workflow in `tests/login.spec.ts`.
+- Reusable UI actions live in `pages/LoginPage.ts`.
+- Selectors use accessible placeholders and roles where practical.
+- The suite avoids hard-coded navigation URLs inside tests by using Playwright `baseURL`.
+- Failure artifacts are enabled to support debugging and client-facing evidence.
+- The test scope is intentionally compact so the framework remains easy to review in a portfolio setting.
+
+## Review Summary
+
+Latest review result:
+
+- Playwright dependencies installed successfully.
+- Chromium browser installed successfully.
+- `npm.cmd test` completed successfully.
+- 3 Playwright tests passed.
+- No Playwright test failures were found.
+- No npm vulnerabilities were reported by `npm install`.
+- Optional Maven validation could not be completed because `mvn` and `javac` were not available on this machine.
+
+## Recruiter and Client Showcase Notes
+
+This project is suitable to present as a compact UI automation framework because it includes:
+
+- A clear business problem and automation solution.
+- Real browser execution against a public demo application.
+- Page Object Model structure.
+- Repeatable install and run commands.
+- Configurable environment support.
+- Test evidence through reports and failure artifacts.
+- Honest separation between the production-style Playwright suite and the optional Java learning folder.
 
 ## Future Enhancements
 
 - Add cross-browser projects for Firefox and WebKit.
 - Add GitHub Actions CI execution.
+- Add cart and checkout workflow coverage.
 - Add API testing examples.
-- Add Allure or custom reporting if client reporting needs grow.
-- Add more Page Object Model coverage for cart and checkout workflows.
+- Add Allure reporting if richer client reports are required.
+- Add unit or lint checks if the codebase grows.
